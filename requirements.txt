@@ -1,0 +1,5 @@
+SpeechRecognition
+PyAudio
+setuptools_scm
+skbuild
+pocketsphinx
