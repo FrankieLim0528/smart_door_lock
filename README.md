@@ -83,6 +83,64 @@ $ roslaunch smart_door_lock smart_door_lock.launch
 
 ```
 
+## Sample Script Paths
+
+- Online Speech Recognition
+```
+~/catkin_ws/src/rc-home-edu-learn-ros/rchomeedu_speech/scripts/google_sr.py
+
+$ pip install SpeechRecognition
+
+```
+
+- Text To Speech
+```
+# Online
+~/catkin_ws/src/rc-home-edu-learn-ros/rchomeedu_speech/scripts/google_tts.py
+
+$ pip install gTTS
+$ sudo apt install mpg321
+
+```
+
+## Debug
+- Speech Recognition Issue
+```
+Traceback (most recent call last):
+  File "speech_recognition_node.py", line 5, in <module>
+    import speech_recognition as sr
+  File "/home/ubuntu/.local/lib/python2.7/site-packages/speech_recognition/__init__.py", line 1513
+    endpoint = f"https://api.assemblyai.com/v2/transcript/{transciption_id}"
+                                                                           ^
+SyntaxError: invalid syntax
+```
+Solution: Replace line 1513 in `__init__.py` from 
+```
+endpoint = f"https://api.assemblyai.com/v2/transcript/{transciption_id}"
+
+to 
+
+endpoint = "https://api.assemblyai.com/v2/transcript/" + transciption_id
+```
+ 
+```
+AttributeError: Could not find PyAudio; check installation
+```
+Solution:
+```
+$ sudo apt-get install portaudio19-dev python-pyaudio
+$ pip install PyAudio
+```
+
+Missing PocketSphinx Module
+
+Solution: https://pypi.org/project/pocketsphinx/0.1.0/
+```
+$ sudo apt-get install -qq python python-dev python-pip build-essential swig libpulse-dev libasound2-dev
+$ pip install setuptools_scm scikit-build
+$ pip install pocketsphinx # only support python 3.8+
+```
+
 ## Launch File
 - Each <node> tag specifies a node to launch.
 - The `name` attribute specifies a unique name for the node.
