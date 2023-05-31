@@ -2,24 +2,26 @@
 
 import rospy
 from opencv_apps.msg import FaceArrayStamped
+from std_msgs.msg import String
 
 
-# testing callback function
-def test_callback(data):
+# callback function
+def callback(data, pub):
     if len(data.faces) > 0:
         for face in data.faces:
             if len(face.eyes) > 0:
-                rospy.loginfo(face.label)
+                pub.publish(face.label)
 
-# listener
+# main function
 def face_listener(callback):
     rospy.init_node('face_listener', anonymous=True)
-    rospy.Subscriber("face_recognition/output", FaceArrayStamped, callback)
+    pub = rospy.Publisher('face_recognition_result', String, queue_size=10)
+    rospy.Subscriber("face_recognition/output", FaceArrayStamped, callback=lambda data: callback(data, pub))
     rospy.spin()
 
 
 if __name__ == "__main__":
-    face_listener(test_callback)
+    face_listener(callback)
 
 
 # roslaunch usb_cam usb_cam-test.launch
