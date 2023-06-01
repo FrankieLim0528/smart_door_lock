@@ -13,7 +13,7 @@ import time
 
 def googlesr():
     rospy.init_node('googlesr', anonymous=True)
-    pub = rospy.Publisher('result', String, queue_size=10)
+    pub = rospy.Publisher('speechrecognition_result', String, queue_size=10)
     count = 3
     while not rospy.is_shutdown():
         # obtain audio from the microphone
@@ -43,23 +43,27 @@ def googlesr():
 
         # recognize speech
         result = ""
+        tts = ""
         try:
             result = r.recognize_google(audio) # online using Google Web Speech API
             print("SR result: " + result)
             if result == passphrase:
             # result = r.recognize_sphinx(audio) # offline using CMUSPhinx
-                # TODO speech generation
-                print("Door unlocked!")
+                tts = "Door unlocked!"
+                print(tts)
+                pub.publish(tts)
                 break
             else:
-                # TODO speech generation
-                print("Wrong passphrase, please try again")
+                tts = "Wrong passphrase, please try again!"
+                print(tts)
+                pub.publish(tts)
                 count -= 1
             if count == 0:
-                # TODO speech generation
-                print("You have exceeded the maximum number of tries, please try again 10 minutes later.")
+                tts = "You have exceeded the maximum number of attempts, please try again 10 minutes later."
+                print(tts)
+                pub.publish(tts)
                 time.sleep(10)
-            pub.publish(result)
+            # pub.publish(result)
         except sr.UnknownValueError:
             print("SR could not understand audio")
         except sr.RequestError as e:
