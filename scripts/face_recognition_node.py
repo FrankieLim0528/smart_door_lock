@@ -7,15 +7,22 @@ from std_msgs.msg import String
 
 # callback function
 def callback(data, pub):
+    name = ""
     if len(data.faces) > 0:
         for face in data.faces:
             if len(face.eyes) > 0:
-                pub.publish(face.label)
+                name = face.label
+                print("name: " + name)
+                # pub.publish("Welcome " + name + ". Please speak your passphrase to unlock the door!")
+    # else:
+    #     print("No face recognized!")
+    #     pub.publish("No face recognized!")
+
 
 # main function
 def face_listener(callback):
     rospy.init_node('face_listener', anonymous=True)
-    pub = rospy.Publisher('face_recognition_result', String, queue_size=10)
+    pub = rospy.Publisher('facerecognition_result', String, queue_size=10)
     rospy.Subscriber("face_recognition/output", FaceArrayStamped, callback=lambda data: callback(data, pub))
     rospy.spin()
 
