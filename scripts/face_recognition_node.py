@@ -13,6 +13,7 @@ def callback(data, pub):
             if len(face.eyes) > 0:
                 name = face.label
                 print("name: " + name)
+                # TODO: Callback function runs infinitely, keep on publishing ot the topic, impossible to generate speech
                 # pub.publish("Welcome " + name + ". Please speak your passphrase to unlock the door!")
     # else:
     #     print("No face recognized!")
@@ -22,7 +23,7 @@ def callback(data, pub):
 # main function
 def face_listener(callback):
     rospy.init_node('face_listener', anonymous=True)
-    pub = rospy.Publisher('facerecognition_result', String, queue_size=10)
+    pub = rospy.Publisher('/facerecognition_result', String, queue_size=10)
     rospy.Subscriber("face_recognition/output", FaceArrayStamped, callback=lambda data: callback(data, pub))
     rospy.spin()
 

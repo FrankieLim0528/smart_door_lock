@@ -1,20 +1,76 @@
+#!/usr/bin/env python
+# -*- coding: utf-8 -*-
+
+import rospy
+from std_msgs.msg import String
+
 import enchant
+import os
 
-def check_passphrase(passphrase):
-    dictionary = enchant.Dict("en_US")
+from config import DATA_DIR
 
+
+banner = r"""
+███████╗███╗   ███╗ █████╗ ██████╗ ████████╗    ██████╗  ██████╗  ██████╗ ██████╗     ██╗      ██████╗  ██████╗██╗  ██╗
+██╔════╝████╗ ████║██╔══██╗██╔══██╗╚══██╔══╝    ██╔══██╗██╔═══██╗██╔═══██╗██╔══██╗    ██║     ██╔═══██╗██╔════╝██║ ██╔╝
+███████╗██╔████╔██║███████║██████╔╝   ██║       ██║  ██║██║   ██║██║   ██║██████╔╝    ██║     ██║   ██║██║     █████╔╝ 
+╚════██║██║╚██╔╝██║██╔══██║██╔══██╗   ██║       ██║  ██║██║   ██║██║   ██║██╔══██╗    ██║     ██║   ██║██║     ██╔═██╗ 
+███████║██║ ╚═╝ ██║██║  ██║██║  ██║   ██║       ██████╔╝╚██████╔╝╚██████╔╝██║  ██║    ███████╗╚██████╔╝╚██████╗██║  ██╗
+╚══════╝╚═╝     ╚═╝╚═╝  ╚═╝╚═╝  ╚═╝   ╚═╝       ╚═════╝  ╚═════╝  ╚═════╝ ╚═╝  ╚═╝    ╚══════╝ ╚═════╝  ╚═════╝╚═╝  ╚═╝
+
+GROUP S7: The Smart Locksmiths
+             ________
+            / ______ \
+            || _  _ ||
+            ||| || |||
+            |||_||_|||
+            || _  _o|| (o)
+            ||| || |||
+            |||_||_|||      ^~^  ,
+            ||______||     ('Y') )
+           /__________\    /   \/
+  _________|__________|__ (\|||/) _________
+          /____________\
+          |____________|
+
+Please choose:
+[1] Register Passphrase
+[2] TODO 
+
+"""
+
+dictionary = enchant.Dict("en_US")
+
+# check for valid passphrase
+def is_valid_passphrase(passphrase):
     words = passphrase.split()
-
-    if len(words) <= 2:
+    if len(words) > 0 and len(words) <= 2:
         if all(dictionary.check(word) for word in words):
             return True
     return False
 
-passphrase = raw_input("Please enter your passphrase: ")
-if check_passphrase(passphrase):
-    print("Valid passphrase")
-    file_path = r"/home/mustar/catkin_ws/src/smart_door_lock/passphrase.txt"
-    with open(file_path, "w") as f:
-        f.write(passphrase)
-else:
-    print("Invalid passphrase.")
+
+def callback_register_passphrase(msg):
+    face_name = msg.data
+
+    passphrase = raw_input("Hi {}! Please enter your passphrase in English [Maximum 2 words]: ".format(face_name))
+    if is_valid_passphrase(passphrase):
+        rospy.loginfo("Valid passphrase")
+        # file_path = r"/home/mustar/catkin_ws/src/smart_door_lock/passphrase.txt"
+        file_path = os.path.join(DATA_DIR, face_name, "passphrase.txt")
+        with open(file_path, "w") as f:
+            f.write(passphrase)
+            rospy.loginfo("User [{}] with passphrase [{}] registered successfully".format(face_name, passphrase))
+    else:
+        print("Invalid passphrase.")
+
+
+
+if __name__ == "__main__":
+    rospy.init_node('main', anonymous=True)
+    
+    print(banner)
+    option = raw_input(">> ")
+
+    if option == 1:
+        rospy.Subscriber("/facerecognition_result", String, callback_register_passphrase)
