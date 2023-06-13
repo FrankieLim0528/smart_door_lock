@@ -13,13 +13,13 @@ RATE = 0.1  # the higher, the faster for next detection
 def callback(data, pub, rate):
     name = ""
     if len(data.faces) > 0:
-        for face in data.faces:
-            if len(face.eyes) > 0:
-                name = face.label
+        face = data.faces[0]
+        if len(face.eyes) > 0:
+            name = face.label
 
-                pub.publish("Welcome " + name + ". Please speak your passphrase to unlock the door!")
-                rate.sleep()
-                break
+            # pub.publish("Welcome " + name + ". Please speak your passphrase to unlock the door!")
+            pub.publish(name)
+            rate.sleep()
 
     # else:
     #     pub.publish("No face recognized!")
@@ -29,7 +29,7 @@ def face_listener(callback):
     rospy.init_node('face_listener', anonymous=True)
 
     rate = rospy.Rate(RATE)
-    pub = rospy.Publisher('facerecognition_result', String, queue_size=10)
+    pub = rospy.Publisher('facerecognition_result', String, queue_size=1)
     rospy.Subscriber("face_recognition/output", FaceArrayStamped, callback=lambda data: callback(data, pub, rate), queue_size=1)
 
     rospy.spin()

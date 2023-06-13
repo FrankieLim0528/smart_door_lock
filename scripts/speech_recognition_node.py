@@ -41,8 +41,11 @@ door_unlocked = """
 
 """
 
+RATE = 0.1 
+
 
 def countdown_timer(face_name):
+    rate.sleep()
     rospy.loginfo("Lock user {} for {}".format(face_name, LOCKDOWN_PERIOD))
     rospy.sleep(LOCKDOWN_PERIOD)
     attempts_left[face_name] = MAX_ATTEMPTS  # reset attempts after account lockout period
@@ -67,7 +70,7 @@ def callback_recognize_passphrase(msg):
     if face_name not in attempts_left:
         attempts_left[face_name] = MAX_ATTEMPTS
 
-    while not rospy.is_shutdown():
+    while True:
         # block user by disabling speech recognition after exceeding maximum attempts
         if attempts_left[face_name] == 0:
             pass
@@ -125,8 +128,9 @@ if __name__ == '__main__':
     attempts_left = {}          # store passphrase attempts left for each user
 
     rospy.init_node('speech_recognition', anonymous=True)
-    pub = rospy.Publisher('/speechrecognition_result', String, queue_size=10)
-    rospy.Subscriber("/facerecognition_result", String, callback_recognize_passphrase)
+    rate = rospy.Rate(RATE)
+    pub = rospy.Publisher('/speechrecognition_result', String, queue_size=1)
+    rospy.Subscriber("/facerecognition_result", String, callback_recognize_passphrase, queue_size=1)
 
     rospy.spin()
     

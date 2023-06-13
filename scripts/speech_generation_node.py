@@ -22,8 +22,8 @@ def googletts():
     # initialize subscriber node called 'googletts'
     rospy.init_node('googletts', anonymous=True)
     # subscribe 2 topics - facerecognition_result and speechrecognition_result
-    rospy.Subscriber("/facerecognition_result", String, callback)
-    rospy.Subscriber("/speechrecognition_result", String, callback)
+    rospy.Subscriber("/facerecognition_result", String, callback, queue_size=1)
+    rospy.Subscriber("/speechrecognition_result", String, callback, queue_size=1)
 
     rospy.spin()
 

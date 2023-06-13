@@ -58,9 +58,12 @@ def callback_register_passphrase(msg):
         rospy.loginfo("Valid passphrase")
         # file_path = r"/home/mustar/catkin_ws/src/smart_door_lock/passphrase.txt"
         file_path = os.path.join(DATA_DIR, face_name, "passphrase.txt")
+        if not os.path.exists(file_path):
+            os.mkdir(os.path.join(DATA_DIR, face_name))
         with open(file_path, "w") as f:
             f.write(passphrase)
             rospy.loginfo("User [{}] with passphrase [{}] registered successfully".format(face_name, passphrase))
+        rospy.signal_shutdown('reason')
     else:
         print("Invalid passphrase.")
 
@@ -71,6 +74,7 @@ if __name__ == "__main__":
     
     print(banner)
     option = raw_input(">> ")
-
-    if option == 1:
+    print(option)
+    if option == '1':
         rospy.Subscriber("/facerecognition_result", String, callback_register_passphrase)
+    rospy.spin()

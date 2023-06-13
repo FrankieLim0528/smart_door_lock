@@ -1,8 +1,9 @@
 import os
 
 # project root
-current_dir = os.getcwd()
-ROOT_DIR = os.path.dirname(os.path.dirname(current_dir))
+# current_dir = "/home/mustar/catkin_ws/src/smart_door_lock/"
+# ROOT_DIR = os.path.dirname(os.path.dirname(current_dir))
+ROOT_DIR = "/home/mustar/catkin_ws/src/smart_door_lock/"
 
 # folder to store user's data
 DATA_DIR = os.path.join(ROOT_DIR, 'data')
