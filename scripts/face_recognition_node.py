@@ -16,18 +16,22 @@ def callback(data, pub, rate):
         for face in data.faces:
             if len(face.eyes) > 0:
                 name = face.label
+
                 pub.publish("Welcome " + name + ". Please speak your passphrase to unlock the door!")
                 rate.sleep()
                 break
+
     # else:
     #     pub.publish("No face recognized!")
 
 # main function
 def face_listener(callback):
     rospy.init_node('face_listener', anonymous=True)
+
     rate = rospy.Rate(RATE)
     pub = rospy.Publisher('facerecognition_result', String, queue_size=10)
     rospy.Subscriber("face_recognition/output", FaceArrayStamped, callback=lambda data: callback(data, pub, rate), queue_size=1)
+
     rospy.spin()
 
 

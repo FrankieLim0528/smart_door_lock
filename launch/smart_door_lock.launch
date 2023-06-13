@@ -1,11 +1,11 @@
 <launch>
+  <!-- Start face recognition node -->
+  <node name="face_recognition_node" pkg="smart_door_lock" type="face_recognition_node.py" output="screen" />
+
   <!-- Start speech recognition node -->
   <node name="speech_recognition_node" pkg="smart_door_lock" type="speech_recognition_node.py" output="screen" />
 
   <!-- Start speech generation node -->
   <node name="speech_generation_node" pkg="smart_door_lock" type="speech_generation_node.py" output="screen" />
-
-  <!-- Start face recognition node -->
-  <node name="face_recognition_node" pkg="smart_door_lock" type="face_recognition_node.py" output="screen" />
 </launch>
 
