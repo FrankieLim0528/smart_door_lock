@@ -70,7 +70,7 @@ def callback_register_passphrase(msg):
 
 
 if __name__ == "__main__":
-    rospy.init_node('main', anonymous=True)
+    rospy.init_node('register_passphrase_node', anonymous=True)
     
     print(banner)
     option = raw_input(">> ")
