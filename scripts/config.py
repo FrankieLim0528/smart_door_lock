@@ -10,4 +10,4 @@ DATA_DIR = os.path.join(ROOT_DIR, 'data')
 
 # passphrase related
 MAX_ATTEMPTS = 3
-LOCKDOWN_PERIOD = 5 * 60        # 5 minutes
+LOCKDOWN_PERIOD = 20     # 5 minutes

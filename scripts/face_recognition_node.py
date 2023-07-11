@@ -3,7 +3,7 @@
 import rospy
 from opencv_apps.msg import FaceArrayStamped
 from std_msgs.msg import String
-
+import time
 
 # constant variables
 RATE = 0.1  # the higher, the faster for next detection
@@ -17,9 +17,10 @@ def callback(data, pub, rate):
         if len(face.eyes) > 0:
             name = face.label
 
-            # pub.publish("Welcome " + name + ". Please speak your passphrase to unlock the door!")
+            # pub.publish("Welcome home " + name + ". Please speak your passphrase to unlock the door!")
             pub.publish(name)
-            rate.sleep()
+            # sub.unregister()
+            rospy.signal_shutdown("Face Recognition for one time")
 
     # else:
     #     pub.publish("No face recognized!")
@@ -30,12 +31,23 @@ def face_listener(callback):
 
     rate = rospy.Rate(RATE)
     pub = rospy.Publisher('facerecognition_result', String, queue_size=1)
-    rospy.Subscriber("face_recognition/output", FaceArrayStamped, callback=lambda data: callback(data, pub, rate), queue_size=1)
+    sub = rospy.Subscriber("face_recognition/output", FaceArrayStamped, callback=lambda data: callback(data, pub, rate), queue_size=1)
+    # rospy.wait_for_message("face_recognition/output", FaceArrayStamped)
+    # sub.unregister()
+    # if len(data.faces) > 0:
+    #     face = data.faces[0]
+    #     if len(face.eyes) > 0:
+    #         name = face.label
 
+    #         # pub.publish("Welcome " + name + ". Please speak your passphrase to unlock the door!")
+    #         pub.publish(name)
+            
+    
     rospy.spin()
 
 
 if __name__ == "__main__":
+    time.sleep(1)
     face_listener(callback)
 
 
