@@ -78,7 +78,13 @@ $ rosrun <package> <script>
 # Build ROS package
 $ catkin_make
 
-# Luanch
+# Open cam
+$ roslaunch usb_cam usb_cam-test.launch
+
+# Train face recognition (Set launch_trainer:=false after finish training)
+$ roslaunch smart_door_lock face_recognition.launch image:=/usb_cam/image_raw launch_trainer:=true
+
+# Launch
 $ roslaunch smart_door_lock smart_door_lock.launch
 
 ```
