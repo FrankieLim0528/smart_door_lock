@@ -12,8 +12,6 @@ def callback(data, pub):
     # check the text before converting into speech
     rospy.loginfo("Input: %s", text)
     # convert text to speech using Google Text-To-Speech API
-    # if (text != 'Wrong passphrase, please try again!'):
-    #     text = "Welcome home " + text + ". Please speak your passphrase to unlock the door!"
     text = "Welcome home " + text + ". Please speak your passphrase to unlock the door!"
     tts = gTTS(text)
     # save the converted speech into mp3 file

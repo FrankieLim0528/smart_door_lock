@@ -35,7 +35,6 @@ GROUP S7: The Smart Locksmiths
 
 Please choose:
 [1] Register Passphrase
-[2] TODO 
 
 """
 
