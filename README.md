@@ -84,7 +84,10 @@ $ roslaunch usb_cam usb_cam-test.launch
 # Train face recognition (Set launch_trainer:=false after finish training)
 $ roslaunch smart_door_lock face_recognition.launch image:=/usb_cam/image_raw launch_trainer:=true
 
-# Launch
+# Register passphrase
+$ roslaunch smart_door_lock register_passphrase.launch
+
+# Launch main program
 $ roslaunch smart_door_lock smart_door_lock.launch
 
 ```
